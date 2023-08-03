@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,9 +24,12 @@ public class Account {
     private Long apartmentId;
 
     private BigDecimal balance;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime balanceDateTime;
 
     @OneToMany
+    @JoinColumn(name = "account_id")
     private Set<Charge> charges;
 
     @OneToMany
@@ -35,28 +39,13 @@ public class Account {
         charges.add(charge);
     }
 
-    public void addPayment(Payment payment) {
-        payments.add(payment);
-        balance = balance.add(payment.getAmount());
-        updateBalance();
-    }
-
-
-    public void updateBalance() {
-        charges.forEach(Charge::setChargeAsDue);
-        BigDecimal amountToSubtract = charges.stream()
-                .filter(charge ->
-                        charge.getChargeDateTime().isAfter(balanceDateTime) &&
-                                charge.getIsDue())
-                .map(Charge::getAmount)
-                .reduce(BigDecimal::add)
-                .orElse(BigDecimal.ZERO);
-
-        balance = balance.subtract(amountToSubtract);
-        balanceDateTime = LocalDateTime.now();
+//    public void addPayment(Payment payment) {
+//        payments.add(payment);
+//        balance = balance.add(payment.getAmount());
+//        updateBalance();
+//    }
 
 
 
-    }
 
 }

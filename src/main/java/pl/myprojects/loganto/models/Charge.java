@@ -18,16 +18,14 @@ public class Charge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "apartment_id")
-    private Long apartmentId;
+    @Column(name = "account_id")
+    private Long accountId;
 
     private LocalDateTime chargeDateTime;
     private BigDecimal amount;
 
-    private Boolean isDue = false;
 
-    public void setChargeAsDue() {
-        if (!chargeDateTime.isAfter(LocalDateTime.now()))
-            setIsDue(true);
+    public boolean isDue(){
+        return !chargeDateTime.isAfter(LocalDateTime.now());
     }
 }
