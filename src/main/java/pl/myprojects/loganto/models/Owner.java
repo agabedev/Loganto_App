@@ -9,11 +9,11 @@ import lombok.ToString;
 
 import java.util.Set;
 
-@Entity
 @ToString
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
 public class Owner{
 
     @Id
